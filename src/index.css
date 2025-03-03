@@ -1,0 +1,18 @@
+html,
+body {
+    height: 100%;
+    /* Sahifani to'liq qamrab olish */
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Butun ekranni qamrab oladi */
+}
+
+main {
+    flex: 1;
+    /* Kontent qismiga moslashuvchan bo'lish imkonini beradi */
+}
