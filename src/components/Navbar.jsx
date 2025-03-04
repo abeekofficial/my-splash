@@ -18,10 +18,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { Link, NavLink } from "react-router-dom";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
 const Navbar = ({ isDarkMode, toggleTheme }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [favoritesCount, setFavoritesCount] = useState(0);
+
+  const { likedImages } = useGlobalContext();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -147,7 +150,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                     zIndex: 1,
                   }}
                 >
-                  {favoritesCount}
+                  {likedImages.length}
                 </Box>
               </IconButton>
             </NavLink>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ImageContainer, Search } from "../../components";
+import { Images, Search } from "../../components";
 import { useActionData } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { Box, Button, CircularProgress, Container } from "@mui/material";
@@ -24,7 +24,7 @@ const Home = () => {
   );
 
   useEffect(() => {
-    if (data && data.results) {
+    if (data?.results) {
       if (pageNumber === 1) {
         setAllImages(data.results);
       } else {
@@ -35,6 +35,7 @@ const Home = () => {
 
   useEffect(() => {
     setPageNumber(1); // Reset page number on new search
+    setAllImages([]); // Clear old images
   }, [actiondata]);
 
   return (
@@ -56,17 +57,20 @@ const Home = () => {
           columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
           gutterBreakpoints={{ 350: "12px", 750: "16px", 900: "24px" }}
         >
-          <Masonry key={allImages.length}>
+          <Masonry key={allImages.length + pageNumber}>
             {allImages && allImages.length > 0 ? (
-              allImages.map((image) => (
-                <ImageContainer
-                  key={image.id}
-                  user={image.user}
-                  description={image.alt_description}
-                  links={image.links}
-                  urls={image.urls}
-                />
-              ))
+              allImages
+                .filter((image) => image) // undefined yoki null qiymatlarni olib tashlash
+                .map((image) => (
+                  <Images
+                    image={image}
+                    key={image.id}
+                    user={image.user}
+                    description={image.alt_description}
+                    links={image.links}
+                    urls={image.urls}
+                  />
+                ))
             ) : (
               <Box
                 display={"flex"}
@@ -82,7 +86,8 @@ const Home = () => {
           onClick={() => setPageNumber(pageNumber + 1)}
           variant="outlined"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, mb: 2 }}
+          disabled={!data?.results?.length} // Disable if no more results
         >
           Load More
         </Button>

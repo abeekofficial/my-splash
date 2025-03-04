@@ -11,6 +11,11 @@ const changeState = (state, action) => {
         ...state,
         likedImages: [...state.likedImages, payload],
       };
+    case "UNLIKE":
+      return {
+        ...state,
+        likedImages: state.likedImages.filter((image) => image.id !== payload),
+      };
   }
 };
 

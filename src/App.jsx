@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { About, Contact, Home, LikedImages } from "./pages/index";
+import { About, Contact, ErrorPage, Home, LikedImages } from "./pages/index";
 import RootLayout from "./layout/RootLayout";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
@@ -35,6 +35,7 @@ function App() {
     {
       path: "/",
       element: <RootLayout theme={theme} toggleTheme={toggleTheme} />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Home />, action: HomeAction },
         { path: "about", element: <About /> },
