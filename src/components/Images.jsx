@@ -13,7 +13,7 @@ import { LiaDownloadSolid } from "react-icons/lia";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useGlobalContext } from "../hooks/useGlobalContext";
 
-const Images = ({ image }) => {
+const Images = ({ image, likedImage }) => {
   //checking prop
   if (!image) {
     return null;
@@ -74,18 +74,18 @@ const Images = ({ image }) => {
           right: "20px",
           display: "flex",
           gap: 1,
-          opacity: 0, // Initially hidden
+          opacity: 0,
           transition: "opacity 0.3s ease",
         }}
       >
         <IconButton
           onClick={() => addLikedImage(image)}
           sx={{
-            backgroundColor: likedImages ? colors.red[500] : colors.grey[200],
+            backgroundColor: likedImage ? colors.red[500] : colors.grey[300],
             borderRadius: "5px",
             padding: "8px 13px",
             "&:hover": {
-              backgroundColor: "#ddd",
+              backgroundColor: colors.grey[600],
             },
           }}
         >

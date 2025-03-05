@@ -4,6 +4,7 @@ import { useActionData } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { Box, Button, CircularProgress, Container } from "@mui/material";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 // Action
 export const action = async ({ request }) => {
@@ -16,6 +17,8 @@ const Home = () => {
   const actiondata = useActionData();
   const [allImages, setAllImages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
+
+  const { likedImages } = useGlobalContext();
 
   const { data, loading, error } = useFetch(
     `${import.meta.env.VITE_UNSPLASH_URL}?client_id=${
@@ -69,6 +72,7 @@ const Home = () => {
                     description={image.alt_description}
                     links={image.links}
                     urls={image.urls}
+                    likedImage={likedImages.some((img) => img.id === image.id)}
                   />
                 ))
             ) : (

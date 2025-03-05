@@ -1,6 +1,10 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
 export const GlobalContext = createContext();
+
+const dataFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem("my-splash")) || { likedImages: [] };
+};
 
 const changeState = (state, action) => {
   const { type, payload } = action;
@@ -16,16 +20,25 @@ const changeState = (state, action) => {
         ...state,
         likedImages: state.likedImages.filter((image) => image.id !== payload),
       };
+    default:
+      return state;
   }
 };
 
 export const GlobalContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(changeState, {
-    likedImages: [],
-  });
+  const [state, dispatch] = useReducer(changeState, dataFromLocalStorage());
+
+  useEffect(() => {
+    localStorage.setItem("my-splash", JSON.stringify(state));
+  }, [state]);
+
+  // for checking likedImage
+  const likedImage = (item) => {
+    return state.likedImages.some((img) => img.id === item.id);
+  };
 
   return (
-    <GlobalContext.Provider value={{ ...state, dispatch }}>
+    <GlobalContext.Provider value={{ ...state, dispatch, likedImage }}>
       {children}
     </GlobalContext.Provider>
   );

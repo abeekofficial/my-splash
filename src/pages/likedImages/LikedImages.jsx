@@ -1,11 +1,11 @@
 import React from "react";
 import { useGlobalContext } from "../../hooks/useGlobalContext";
-import { Box, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Images } from "../../components";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const LikedImages = () => {
-  const { likedImages } = useGlobalContext();
+  const { likedImages, likedImage } = useGlobalContext();
   console.log(likedImages, "LikedI");
 
   // Agar likedImages bo'sh bo'lsa, xabar ko'rsatish
@@ -26,7 +26,7 @@ const LikedImages = () => {
       >
         <Masonry>
           {likedImages.map((image) => (
-            <Images key={image.id} image={image} />
+            <Images key={image.id} image={image} likedImage={likedImage} />
           ))}
         </Masonry>
       </ResponsiveMasonry>
