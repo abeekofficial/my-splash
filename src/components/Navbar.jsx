@@ -37,11 +37,11 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
   // Styles for active and inactive NavLink items
   const navLinkStyle = ({ isActive }) => ({
-    textDecoration: "none",
-    background: isActive ? colors.blue[500] : "inherit",
+    textDecoration: isActive ? "underline blue" : "none",
     color: isDarkMode ? colors.grey[50] : colors.grey[900],
     borderRadius: "5px",
     padding: "0 8px",
+    width: "100%",
     display: "block",
   });
 
@@ -74,9 +74,14 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.label} disablePadding>
+          <ListItem key={item.label} sx={{ width: "100%" }}>
             <NavLink to={item.path} style={navLinkStyle}>
-              <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemButton
+                sx={{
+                  width: "100%", // This makes the button fill the width
+                  justifyContent: "center", // Center the text horizontally
+                }}
+              >
                 <ListItemText primary={item.label} />
               </ListItemButton>
             </NavLink>

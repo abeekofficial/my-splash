@@ -8,7 +8,7 @@ const Search = () => {
     <Form
       method="post"
       style={{
-        width: "50%",
+        width: "90%",
         margin: "10px auto",
         display: "flex",
         alignItems: "center",
@@ -16,7 +16,14 @@ const Search = () => {
       }}
     >
       <FormInput name="search" placeholder="Search" type="text" />
-      <Button type="submit" variant="outlined" color="text.primary">
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          fontSize: { xs: "12px", md: "15px" },
+          textTransform: "capitalize",
+        }}
+      >
         Search
       </Button>
     </Form>
