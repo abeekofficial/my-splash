@@ -37,8 +37,12 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
   // Styles for active and inactive NavLink items
   const navLinkStyle = ({ isActive }) => ({
-    textDecoration: isActive ? "underline blue" : "none",
-    color: isDarkMode ? colors.grey[50] : colors.grey[900],
+    textDecoration: isActive ? "underline #2196f3" : "none",
+    color: isActive
+      ? colors.blue[500]
+      : isDarkMode
+      ? colors.grey[50]
+      : colors.grey[900],
     borderRadius: "5px",
     padding: "0 8px",
     width: "100%",
@@ -88,38 +92,6 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           </ListItem>
         ))}
       </List>
-      <Box
-        display={"flex"}
-        justifyContent={"center"}
-        mt={2}
-        alignItems={"center"}
-      >
-        <IconButton aria-label="toggle theme" onClick={toggleTheme}>
-          {isDarkMode ? <NightsStayIcon /> : <LightModeIcon />}
-        </IconButton>
-        <IconButton sx={{ position: "relative" }}>
-          <FavoriteIcon />
-          <Box
-            sx={{
-              width: "20px",
-              height: "20px",
-              borderRadius: "100%",
-              position: "absolute",
-              top: "-10px",
-              right: "-10px",
-              backgroundColor: "#42a5f5",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              zIndex: 1,
-            }}
-          >
-            {likedImages.length}
-          </Box>
-        </IconButton>
-      </Box>
     </Box>
   );
 
@@ -213,7 +185,9 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 display: { xs: "flex", md: "none" },
                 justifyContent: "space-between",
                 alignItems: "center",
-                width: "100%",
+                width: "100%", // Ensure full width
+                px: 2, // Optional: add padding for better look
+                boxSizing: "border-box", // Keep this to ensure consistent sizing
               }}
             >
               <IconButton
@@ -224,9 +198,48 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
               >
                 <MenuIcon />
               </IconButton>
-              <NavLink to="/login" style={navLinkStyle}>
-                <Button sx={{ color: "text.primary" }}>Login</Button>
-              </NavLink>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                mt={2}
+                alignItems={"center"}
+              >
+                <IconButton aria-label="toggle theme" onClick={toggleTheme}>
+                  {isDarkMode ? <NightsStayIcon /> : <LightModeIcon />}
+                </IconButton>
+                <NavLink to="/likedImages" style={{ textDecoration: "none" }}>
+                  <IconButton sx={{ position: "relative" }}>
+                    <FavoriteIcon />
+                    <Box
+                      sx={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "100%",
+                        position: "absolute",
+                        top: "-10px",
+                        right: "-10px",
+                        backgroundColor: "#42a5f5",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "12px",
+                        zIndex: 1,
+                      }}
+                    >
+                      {likedImages.length}
+                    </Box>
+                  </IconButton>
+                </NavLink>
+                <NavLink
+                  to="/login"
+                  style={{ marginLeft: "auto", ...navLinkStyle }}
+                >
+                  <Button size="small" sx={{ color: "text.primary" }}>
+                    Login
+                  </Button>
+                </NavLink>
+              </Box>
             </Box>
           </Toolbar>
         </Container>

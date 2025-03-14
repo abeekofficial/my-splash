@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { About, Contact, ErrorPage, Home, LikedImages } from "./pages/index";
+import {
+  About,
+  Contact,
+  ErrorPage,
+  Home,
+  ImageInfo,
+  LikedImages,
+} from "./pages/index";
 import RootLayout from "./layout/RootLayout";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
@@ -41,6 +48,7 @@ function App() {
         { path: "about", element: <About /> },
         { path: "likedImages", element: <LikedImages /> },
         { path: "contact", element: <Contact /> },
+        { path: "ImageInfo/:id", element: <ImageInfo /> },
       ],
     },
   ]);

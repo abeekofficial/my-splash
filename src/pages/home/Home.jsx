@@ -20,20 +20,10 @@ const Home = () => {
 
   const { likedImages } = useGlobalContext();
 
-  console.log("key", import.meta.env.VITE_UNSPLASH_KEY);
-  console.log("url", import.meta.env.VITE_UNSPLASH_URL);
-
-  console.log(
-    "API =>",
-    `${import.meta.env.VITE_UNSPLASH_URL}?client_id=${
-      import.meta.env.VITE_UNSPLASH_KEY
-    }&query=${actiondata || "car"}&page=${pageNumber}`
-  );
-
   const { data, loading, error } = useFetch(
     `${import.meta.env.VITE_UNSPLASH_URL}?client_id=${
       import.meta.env.VITE_UNSPLASH_KEY
-    }&query=${actiondata || "car"}&page=${pageNumber}`
+    }&query=${actiondata || "random"}&page=${pageNumber}`
   );
 
   useEffect(() => {
