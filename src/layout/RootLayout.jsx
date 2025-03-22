@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { Footer, Navbar } from "../components";
+import { GlobalContext } from "../context/GlobalContext";
 
 const RootLayout = ({ toggleTheme, theme }) => {
+  const { isExpanded } = useContext(GlobalContext); // isExpanded holatini olish
+
   return (
     <>
-      <Navbar isDarkMode={theme} toggleTheme={toggleTheme} />
+      {!isExpanded && <Navbar isDarkMode={theme} toggleTheme={toggleTheme} />}
       <Outlet />
-      <Footer />
+      {!isExpanded && <Footer />}
     </>
   );
 };

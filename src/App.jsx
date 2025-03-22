@@ -12,8 +12,9 @@ import {
 import RootLayout from "./layout/RootLayout";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
+import { GlobalContextProvider } from "./context/GlobalContext"; // GlobalContextProvider ni import qilish
 
-//action
+// Action
 import { action as HomeAction } from "./pages/home/Home";
 
 function App() {
@@ -48,16 +49,20 @@ function App() {
         { path: "about", element: <About /> },
         { path: "likedImages", element: <LikedImages /> },
         { path: "contact", element: <Contact /> },
-        { path: "ImageInfo/:id", element: <ImageInfo /> },
+        { path: "imageInfo/:id", element: <ImageInfo /> },
       ],
     },
   ]);
 
   return (
-    <ThemeProvider theme={AppTheme}>
-      <CssBaseline />
-      <RouterProvider router={routes} />
-    </ThemeProvider>
+    <GlobalContextProvider>
+      {" "}
+      {/* GlobalContextProvider ni qo'shish */}
+      <ThemeProvider theme={AppTheme}>
+        <CssBaseline />
+        <RouterProvider router={routes} />
+      </ThemeProvider>
+    </GlobalContextProvider>
   );
 }
 
