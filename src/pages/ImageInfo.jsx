@@ -13,6 +13,7 @@ const ImageInfo = () => {
   const { data, loading, error } = useFetch(url);
   const { isExpanded, toggleImageSize } = useContext(GlobalContext); // isExpanded va toggleImageSize ni olish
 
+  console.log("data => ", data);
   return (
     <Box
       sx={{
@@ -35,10 +36,10 @@ const ImageInfo = () => {
           </Button>
         </Box>
       )}
-      {data && (
+      {data?.urls?.full && (
         <Box position="relative">
           <img
-            src={data.urls?.full}
+            src={data.urls.full}
             alt={data.description || "Image"}
             style={{
               maxWidth: isExpanded ? "100%" : "80%",

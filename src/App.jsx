@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+
+// Pages
 import {
   About,
   Contact,
@@ -8,14 +14,23 @@ import {
   Home,
   ImageInfo,
   LikedImages,
+  Login,
+  Register,
 } from "./pages/index";
+
+// Layouts
 import RootLayout from "./layout/RootLayout";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
+
+// Context
 import { GlobalContextProvider } from "./context/GlobalContext"; // GlobalContextProvider ni import qilish
 
 // Action
 import { action as HomeAction } from "./pages/home/Home";
+import { ProtectedRoutes } from "./components";
+
+// Components
 
 function App() {
   const [theme, setTheme] = useState(false); // false = light, true = dark
@@ -39,10 +54,17 @@ function App() {
     setTheme((prevTheme) => !prevTheme);
   };
 
+  // user
+  const user = false;
+
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: <RootLayout theme={theme} toggleTheme={toggleTheme} />,
+      element: (
+        <ProtectedRoutes user={user}>
+          <RootLayout theme={theme} toggleTheme={toggleTheme} />
+        </ProtectedRoutes>
+      ),
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Home />, action: HomeAction },
@@ -52,6 +74,8 @@ function App() {
         { path: "imageInfo/:id", element: <ImageInfo /> },
       ],
     },
+    { path: "/login", element: user ? <Navigate to="/" /> : <Login /> },
+    { path: "/register", element: user ? <Navigate to="/" /> : <Register /> },
   ]);
 
   return (
