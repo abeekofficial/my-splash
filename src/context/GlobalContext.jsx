@@ -4,7 +4,8 @@ export const GlobalContext = createContext();
 
 // LocalStorage'dan ma'lumotlarni olish
 const dataFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem("my-splash")) || { likedImages: [] };
+  const data = JSON.parse(localStorage.getItem("my-splash"));
+  return data || { likedImages: [], user: true };
 };
 
 // useReducer uchun reducer funksiyasi
@@ -21,6 +22,16 @@ const changeState = (state, action) => {
       return {
         ...state,
         likedImages: state.likedImages.filter((image) => image.id !== payload),
+      };
+    case "LOGIN":
+      return {
+        ...state,
+        user: payload,
+      };
+    case "LOGOUT":
+      return {
+        ...state,
+        user: null,
       };
     default:
       return state;
@@ -50,7 +61,7 @@ export const GlobalContextProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        ...state, // likedImages
+        ...state, // likedImages and user
         dispatch, // useReducer dispatch
         likedImage, // likedImage tekshirish funksiyasi
         isExpanded, // Rasmning kattalik holati

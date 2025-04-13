@@ -1,23 +1,34 @@
+// mui icons
 import {
   Facebook,
   GitHub,
   Google,
   PersonAddOutlined,
 } from "@mui/icons-material";
+
+//mui components
 import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   Avatar,
   Box,
   Button,
   Container,
+  FormControlLabel,
   Grid,
+  IconButton,
   Paper,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+
+// mui colors
+import { purple } from "@mui/material/colors";
+// react router dom
 import { Link } from "react-router-dom";
+
+// hooks
+import { useRegister } from "../../hooks/useRegister";
 
 const Register = () => {
   const handleSubmit = (event) => {
@@ -25,6 +36,7 @@ const Register = () => {
     console.log("register");
   };
 
+  const { registerWithGoogle } = useRegister();
   return (
     <Container maxWidth="xs">
       <Paper elevation={10} sx={{ marginTop: 8, padding: 2 }}>
@@ -81,9 +93,34 @@ const Register = () => {
             or sign up with
           </Typography>
           <Box sx={{ mt: 2, textAlign: "center" }}>
-            <Google sx={{ color: "grey", mr: 2 }} fontSize="large" />
-            <GitHub sx={{ color: "grey", mx: 2 }} fontSize="large" />
-            <Facebook sx={{ color: "grey", ml: 2 }} fontSize="large" />
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                mr: 2,
+              }}
+              onClick={registerWithGoogle}
+            >
+              <Google fontSize="large" />
+            </IconButton>
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                mx: 2,
+              }}
+            >
+              <GitHub fontSize="large" />
+            </IconButton>
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                ml: 2,
+              }}
+            >
+              <Facebook fontSize="large" />
+            </IconButton>
           </Box>
           <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
             <Typography>Already have an account?</Typography>

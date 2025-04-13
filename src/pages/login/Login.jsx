@@ -12,10 +12,12 @@ import {
   Button,
   Container,
   Grid,
+  IconButton,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import { purple } from "@mui/material/colors";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -84,9 +86,33 @@ const Login = () => {
             or sign in with
           </Typography>
           <Box sx={{ mt: 2, textAlign: "center" }}>
-            <Google sx={{ color: "grey", mr: 2 }} fontSize="large" />
-            <GitHub sx={{ color: "grey", mx: 2 }} fontSize="large" />
-            <Facebook sx={{ color: "grey", ml: 2 }} fontSize="large" />
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                mr: 2,
+              }}
+            >
+              <Google fontSize="large" />
+            </IconButton>
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                mx: 2,
+              }}
+            >
+              <GitHub fontSize="large" />
+            </IconButton>
+            <IconButton
+              sx={{
+                "&:hover": { color: purple[500], cursor: "pointer" },
+                color: "grey",
+                ml: 2,
+              }}
+            >
+              <Facebook fontSize="large" />
+            </IconButton>
           </Box>
           <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
             <Typography>Don't have an account?</Typography>

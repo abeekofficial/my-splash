@@ -6,6 +6,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import { useGlobalContext } from "./hooks/useGlobalContext";
 // Pages
 import {
   About,
@@ -35,6 +36,9 @@ import { ProtectedRoutes } from "./components";
 function App() {
   const [theme, setTheme] = useState(false); // false = light, true = dark
 
+  // user
+  const { user } = useGlobalContext();
+
   const AppTheme = createTheme({
     palette: {
       mode: theme ? "dark" : "light",
@@ -53,9 +57,6 @@ function App() {
   const toggleTheme = () => {
     setTheme((prevTheme) => !prevTheme);
   };
-
-  // user
-  const user = false;
 
   const routes = createBrowserRouter([
     {
