@@ -30,6 +30,8 @@ import { GlobalContextProvider } from "./context/GlobalContext"; // GlobalContex
 // Action
 import { action as HomeAction } from "./pages/home/Home";
 import { ProtectedRoutes } from "./components";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/firebaseConfig";
 
 // Components
 
@@ -37,7 +39,7 @@ function App() {
   const [theme, setTheme] = useState(false); // false = light, true = dark
 
   // user
-  const { user } = useGlobalContext();
+  const { user, dispatch } = useGlobalContext();
 
   const AppTheme = createTheme({
     palette: {
@@ -57,6 +59,19 @@ function App() {
   const toggleTheme = () => {
     setTheme((prevTheme) => !prevTheme);
   };
+
+  // Auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch({ type: "LOGIN", payload: user });
+      } else {
+        dispatch({ type: "LOGOUT" });
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const routes = createBrowserRouter([
     {

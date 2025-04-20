@@ -5,7 +5,7 @@ export const GlobalContext = createContext();
 // LocalStorage'dan ma'lumotlarni olish
 const dataFromLocalStorage = () => {
   const data = JSON.parse(localStorage.getItem("my-splash"));
-  return data || { likedImages: [], user: true };
+  return data || { likedImages: [] };
 };
 
 // useReducer uchun reducer funksiyasi
@@ -31,7 +31,7 @@ const changeState = (state, action) => {
     case "LOGOUT":
       return {
         ...state,
-        user: null,
+        user: false,
       };
     default:
       return state;

@@ -14,6 +14,9 @@ import {
   SwipeableDrawer,
   Divider,
   colors,
+  Avatar,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -23,11 +26,13 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { Link, NavLink } from "react-router-dom";
 import { useGlobalContext } from "../hooks/useGlobalContext";
+import { useRegister } from "../hooks/useRegister";
 
 const Navbar = ({ isDarkMode, toggleTheme }) => {
   const [state, setState] = useState({ left: false });
-  const { likedImages } = useGlobalContext();
-
+  const { likedImages, user } = useGlobalContext();
+  console.log("user =>", user);
+  const { handleLogout } = useRegister();
   // Nav items
   const navItems = [
     { label: "Home", path: "/" },
@@ -61,6 +66,17 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
     setState({ ...state, [anchor]: open });
   };
 
+  // Avatar dropdown
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   // Drawer content
   const drawerList = (anchor) => (
     <Box
@@ -174,9 +190,55 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                   </Box>
                 </IconButton>
               </NavLink>
-              <NavLink to="/login" style={{ textDecoration: "none" }}>
-                <Button sx={{ color: "text.primary" }}>LOGIN</Button>
-              </NavLink>
+              {user?.emailVerified ? (
+                <Box
+                  sx={{
+                    border: "3px solid #4caf50",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 40,
+                    height: 40,
+                    ml: 2,
+                  }}
+                >
+                  <IconButton onClick={handleClick} sx={{ p: 0 }}>
+                    <Avatar
+                      alt={user?.displayName}
+                      src={user?.photoURL}
+                      sx={{
+                        height: 38,
+                        width: 38,
+                        border: "2px solid #fff",
+                      }}
+                    />
+                  </IconButton>
+                </Box>
+              ) : (
+                <NavLink to="/login" style={{ textDecoration: "none" }}>
+                  <Button size="small" sx={{ color: "text.primary" }}>
+                    Login
+                  </Button>
+                </NavLink>
+              )}
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
             </Box>
 
             {/* Mobile Menu Icon */}
@@ -231,14 +293,58 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                     </Box>
                   </IconButton>
                 </NavLink>
-                <NavLink
-                  to="/login"
-                  style={{ marginLeft: "auto", ...navLinkStyle }}
+                {user?.emailVerified ? (
+                  <Box
+                    sx={{
+                      border: "3px solid #4caf50",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 40,
+                      height: 40,
+                      ml: 2,
+                    }}
+                  >
+                    <IconButton onClick={handleClick}>
+                      <Avatar
+                        alt={user?.displayName}
+                        src={user?.photoURL}
+                        sx={{
+                          height: 38,
+                          width: 38,
+                          border: "2px solid #fff",
+                        }}
+                      />
+                    </IconButton>
+                  </Box>
+                ) : (
+                  <NavLink
+                    style={{ marginLeft: "auto", ...navLinkStyle }}
+                    to="/login"
+                  >
+                    <Button size="small" sx={{ color: "text.primary" }}>
+                      Login
+                    </Button>
+                  </NavLink>
+                )}
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
                 >
-                  <Button size="small" sx={{ color: "text.primary" }}>
-                    Login
-                  </Button>
-                </NavLink>
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
               </Box>
             </Box>
           </Toolbar>
