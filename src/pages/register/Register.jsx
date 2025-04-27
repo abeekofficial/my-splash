@@ -28,6 +28,7 @@ import { Form, Link, useActionData, useNavigation } from "react-router-dom";
 
 // hooks
 import { useRegister } from "../../hooks/useRegister";
+import { useEffect } from "react";
 
 // action
 export const action = async ({ request }) => {
@@ -56,23 +57,26 @@ export const action = async ({ request }) => {
   if (data.password.length < 6) {
     return { error: "Password must be at least 6 characters" };
   }
-
-  // Here you would typically call your registration API
-  // For example:
-  // try {
-  //   await registerUser(data);
-  //   return redirect("/");
-  // } catch (error) {
-  //   return { error: error.message };
-  // }
-
   return data;
 };
 
 const Register = () => {
+  const { registerWithGoogle, registerWithEmail } = useRegister();
+
   const inputData = useActionData();
+  console.log("inputdata", inputData);
+
+  useEffect(() => {
+    if (inputData) {
+      registerWithEmail(
+        inputData.displayName,
+        inputData.email,
+        inputData.password
+      );
+    }
+  }, [inputData]);
+
   const navigation = useNavigation();
-  const { registerWithGoogle } = useRegister();
 
   const isSubmitting = navigation.state === "submitting";
 
@@ -185,6 +189,7 @@ const Register = () => {
               sx={{ mt: 3 }}
             >
               <Button
+                onClick={registerWithEmail}
                 fullWidth
                 variant="contained"
                 type="submit"

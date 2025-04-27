@@ -29,7 +29,12 @@ import { GlobalContextProvider } from "./context/GlobalContext"; // GlobalContex
 
 // Action
 import { action as HomeAction } from "./pages/home/Home";
+import { action as RegisterAction } from "./pages/register/Register";
+
+// components
 import { ProtectedRoutes } from "./components";
+
+// firebase
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/firebaseConfig";
 
@@ -91,7 +96,11 @@ function App() {
       ],
     },
     { path: "/login", element: user ? <Navigate to="/" /> : <Login /> },
-    { path: "/register", element: user ? <Navigate to="/" /> : <Register /> },
+    {
+      path: "/register",
+      element: user ? <Navigate to="/" /> : <Register />,
+      action: RegisterAction,
+    },
   ]);
 
   return (

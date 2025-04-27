@@ -190,7 +190,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                   </Box>
                 </IconButton>
               </NavLink>
-              {user?.emailVerified ? (
+              {user?.displayName || user?.email ? (
                 <Box
                   sx={{
                     border: "3px solid #4caf50",
@@ -217,7 +217,17 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 </Box>
               ) : (
                 <NavLink to="/login" style={{ textDecoration: "none" }}>
-                  <Button size="small" sx={{ color: "text.primary" }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{
+                      color: "#fff",
+                      ml: 2,
+                      borderRadius: 5,
+                      paddingX: 2,
+                      paddingY: 1,
+                    }}
+                  >
                     Login
                   </Button>
                 </NavLink>
