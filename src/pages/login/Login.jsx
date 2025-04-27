@@ -1,9 +1,13 @@
+// mui icons
 import {
-  Facebook,
-  GitHub,
   Google,
   LockOpenOutlined,
+  LockOutlined,
+  MailLockOutlined,
+  MailOutline,
 } from "@mui/icons-material";
+
+// mui components
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
@@ -12,16 +16,24 @@ import {
   Button,
   Container,
   Grid,
-  IconButton,
+  InputAdornment,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
-import { purple } from "@mui/material/colors";
-import React from "react";
-import { Link } from "react-router-dom";
+
+// react-router-dom
+import { Link, useNavigation } from "react-router-dom";
+
+// hooks
+import { useRegister } from "../../hooks/useRegister";
 
 const Login = () => {
+  const navigation = useNavigation();
+  const { registerWithGoogle } = useRegister();
+
+  const isSubmitting = navigation.state === "submitting";
+
   //handleSubmit
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -46,19 +58,33 @@ const Login = () => {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
-            placeholder="Enter your email"
+            placeholder="Email"
             type="email"
             autoFocus
             required
             fullWidth
             sx={{ mt: 2 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <MailOutline />
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
-            placeholder="Enter your password"
+            placeholder="Password"
             required
             fullWidth
             sx={{ mt: 2 }}
             type="password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
           <Box
             sx={{
@@ -79,40 +105,41 @@ const Login = () => {
               Forgot password?
             </Typography>
           </Box>
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
-            Sign in
-          </Button>
-          <Typography sx={{ mt: 3, textAlign: "center" }} component="p">
-            or sign in with
-          </Typography>
-          <Box sx={{ mt: 2, textAlign: "center" }}>
-            <IconButton
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            gap={2}
+            sx={{ mt: 2 }}
+          >
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
               sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
+                py: 1.5,
+                fontWeight: "bold",
+              }}
+            >
+              {isSubmitting ? "Signing Up..." : "Sign Up"}
+            </Button>
+            <Button
+              fullWidth
+              startIcon={<Google />}
+              variant="contained"
+              sx={{
+                backgroundColor: "#7b1fa2",
+                "&:hover": {
+                  backgroundColor: "#9c27b0",
+                  cursor: "pointer",
+                },
+                color: "white",
                 mr: 2,
               }}
+              onClick={registerWithGoogle}
             >
-              <Google fontSize="large" />
-            </IconButton>
-            <IconButton
-              sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
-                mx: 2,
-              }}
-            >
-              <GitHub fontSize="large" />
-            </IconButton>
-            <IconButton
-              sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
-                ml: 2,
-              }}
-            >
-              <Facebook fontSize="large" />
-            </IconButton>
+              Google
+            </Button>
           </Box>
           <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
             <Typography>Don't have an account?</Typography>

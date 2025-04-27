@@ -1,12 +1,14 @@
 // mui icons
 import {
-  Facebook,
-  GitHub,
+  AccountCircle,
   Google,
+  LockOpen,
+  LockOutlined,
+  MailOutline,
   PersonAddOutlined,
 } from "@mui/icons-material";
 
-//mui components
+// mui components
 import Checkbox from "@mui/material/Checkbox";
 import {
   Avatar,
@@ -15,129 +17,220 @@ import {
   Container,
   FormControlLabel,
   Grid,
-  IconButton,
   Paper,
-  Snackbar,
   TextField,
   Typography,
+  InputAdornment,
 } from "@mui/material";
 
-// mui colors
-import { purple } from "@mui/material/colors";
 // react router dom
-import { Link } from "react-router-dom";
+import { Form, Link, useActionData, useNavigation } from "react-router-dom";
 
 // hooks
 import { useRegister } from "../../hooks/useRegister";
 
-const Register = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("register");
+// action
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = {
+    displayName: formData.get("displayName"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
   };
 
+  // Validation
+  if (
+    !data.displayName ||
+    !data.email ||
+    !data.password ||
+    !data.confirmPassword
+  ) {
+    return { error: "All fields are required" };
+  }
+
+  if (data.password !== data.confirmPassword) {
+    return { error: "Passwords don't match" };
+  }
+
+  if (data.password.length < 6) {
+    return { error: "Password must be at least 6 characters" };
+  }
+
+  // Here you would typically call your registration API
+  // For example:
+  // try {
+  //   await registerUser(data);
+  //   return redirect("/");
+  // } catch (error) {
+  //   return { error: error.message };
+  // }
+
+  return data;
+};
+
+const Register = () => {
+  const inputData = useActionData();
+  const navigation = useNavigation();
   const { registerWithGoogle } = useRegister();
+
+  const isSubmitting = navigation.state === "submitting";
+
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={10} sx={{ marginTop: 8, padding: 2 }}>
-        <Avatar
-          sx={{
-            textAlign: "center",
-            mx: "auto",
-            bgcolor: "secondary.main",
-            mb: 1,
-          }}
-        >
-          <PersonAddOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
-          Sign Up
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            placeholder="Enter your fullname"
-            autoFocus
-            required
-            fullWidth
-            sx={{ mt: 2 }}
-          />
-          <TextField
-            placeholder="Enter your email"
-            required
-            fullWidth
-            sx={{ mt: 2 }}
-            type="email"
-          />
-          <TextField
-            placeholder="Enter your password"
-            required
-            fullWidth
-            sx={{ mt: 2 }}
-            type="password"
-          />
-          <TextField
-            placeholder="Confirm your password"
-            required
-            fullWidth
-            sx={{ mt: 2 }}
-            type="password"
-          />
-          <FormControlLabel
-            control={<Checkbox color="primary" />}
-            label="I agree to the terms and conditions"
-          />
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
+    <Box
+      sx={{
+        backgroundImage:
+          'linear-gradient(rgba(0, 0, 0, 0.85), url("https://source.unsplash.com/random/1600x900/?dark,signup")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Container maxWidth="xs">
+        <Paper elevation={10} sx={{ marginTop: 8, padding: 2 }}>
+          <Avatar
+            sx={{
+              textAlign: "center",
+              mx: "auto",
+              bgcolor: "secondary.main",
+              mb: 1,
+            }}
+          >
+            <PersonAddOutlined />
+          </Avatar>
+          <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
             Sign Up
-          </Button>
-          <Typography sx={{ mt: 3, textAlign: "center" }} component="p">
-            or sign up with
           </Typography>
-          <Box sx={{ mt: 2, textAlign: "center" }}>
-            <IconButton
-              sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
-                mr: 2,
-              }}
-              onClick={registerWithGoogle}
-            >
-              <Google fontSize="large" />
-            </IconButton>
-            <IconButton
-              sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
-                mx: 2,
-              }}
-            >
-              <GitHub fontSize="large" />
-            </IconButton>
-            <IconButton
-              sx={{
-                "&:hover": { color: purple[500], cursor: "pointer" },
-                color: "grey",
-                ml: 2,
-              }}
-            >
-              <Facebook fontSize="large" />
-            </IconButton>
-          </Box>
-          <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
-            <Typography>Already have an account?</Typography>
-            <Typography
-              to="/login"
-              component={Link}
-              sx={{
-                color: "primary.main",
-                textDecoration: "underline",
-              }}
-            >
-              Sign In
+
+          {inputData?.error && (
+            <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
+              {inputData.error}
             </Typography>
-          </Grid>
-        </Box>
-      </Paper>
-    </Container>
+          )}
+
+          <Form method="post" sx={{ mt: 1 }}>
+            <TextField
+              placeholder="Fullname"
+              name="displayName"
+              autoFocus
+              required
+              fullWidth
+              sx={{ mt: 2 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              placeholder="Email"
+              name="email"
+              required
+              fullWidth
+              sx={{ mt: 2 }}
+              type="email"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <MailOutline />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              placeholder="Password"
+              name="password"
+              required
+              fullWidth
+              sx={{ mt: 2 }}
+              type="password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <LockOpen />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              placeholder="Confirm password"
+              name="confirmPassword"
+              required
+              fullWidth
+              sx={{ mt: 2 }}
+              type="password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <LockOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormControlLabel
+              control={<Checkbox color="primary" required />}
+              label="I agree to the terms and conditions"
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              gap={2}
+              sx={{ mt: 3 }}
+            >
+              <Button
+                fullWidth
+                variant="contained"
+                type="submit"
+                disabled={isSubmitting}
+                sx={{
+                  py: 1.5,
+                  fontWeight: "bold",
+                }}
+              >
+                {isSubmitting ? "Signing Up..." : "Sign Up"}
+              </Button>
+              <Button
+                fullWidth
+                startIcon={<Google />}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#7b1fa2",
+                  "&:hover": {
+                    backgroundColor: "#9c27b0",
+                    cursor: "pointer",
+                  },
+                  color: "white",
+                  mr: 2,
+                }}
+                onClick={registerWithGoogle}
+              >
+                Google
+              </Button>
+            </Box>
+            <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
+              <Typography>Already have an account?</Typography>
+              <Typography
+                to="/login"
+                component={Link}
+                sx={{
+                  color: "primary.main",
+                  textDecoration: "underline",
+                }}
+              >
+                Sign In
+              </Typography>
+            </Grid>
+          </Form>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 
