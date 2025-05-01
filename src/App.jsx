@@ -27,9 +27,10 @@ import { CssBaseline } from "@mui/material";
 // Context
 import { GlobalContextProvider } from "./context/GlobalContext"; // GlobalContextProvider ni import qilish
 
-// Action
+// Actions
 import { action as HomeAction } from "./pages/home/Home";
 import { action as RegisterAction } from "./pages/register/Register";
+import { action as LoginAction } from "./pages/login/Login";
 
 // components
 import { ProtectedRoutes } from "./components";
@@ -95,7 +96,11 @@ function App() {
         { path: "imageInfo/:id", element: <ImageInfo /> },
       ],
     },
-    { path: "/login", element: user ? <Navigate to="/" /> : <Login /> },
+    {
+      path: "/login",
+      element: user ? <Navigate to="/" /> : <Login />,
+      action: LoginAction,
+    },
     {
       path: "/register",
       element: user ? <Navigate to="/" /> : <Register />,
@@ -105,8 +110,6 @@ function App() {
 
   return (
     <GlobalContextProvider>
-      {" "}
-      {/* GlobalContextProvider ni qo'shish */}
       <ThemeProvider theme={AppTheme}>
         <CssBaseline />
         <RouterProvider router={routes} />

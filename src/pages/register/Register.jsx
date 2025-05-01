@@ -119,8 +119,10 @@ const Register = () => {
 
           <Form method="post" sx={{ mt: 1 }}>
             <TextField
-              placeholder="Fullname"
               name="displayName"
+              autoComplete="FullName"
+              id="fullname"
+              label="FullName"
               autoFocus
               required
               fullWidth
@@ -134,12 +136,14 @@ const Register = () => {
               }}
             />
             <TextField
-              placeholder="Email"
-              name="email"
+              margin="normal"
               required
               fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
               sx={{ mt: 2 }}
-              type="email"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="start">
@@ -149,7 +153,9 @@ const Register = () => {
               }}
             />
             <TextField
-              placeholder="Password"
+              autoComplete="password"
+              id="password"
+              label="Password"
               name="password"
               required
               fullWidth
@@ -164,7 +170,9 @@ const Register = () => {
               }}
             />
             <TextField
-              placeholder="Confirm password"
+              autoComplete="confirmPassword"
+              id="confirmPassword"
+              label="Confirm password"
               name="confirmPassword"
               required
               fullWidth
@@ -206,9 +214,9 @@ const Register = () => {
                 startIcon={<Google />}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#7b1fa2",
+                  backgroundColor: "#d81b60",
                   "&:hover": {
-                    backgroundColor: "#9c27b0",
+                    backgroundColor: "#d81b60",
                     cursor: "pointer",
                   },
                   color: "white",
@@ -224,10 +232,7 @@ const Register = () => {
               <Typography
                 to="/login"
                 component={Link}
-                sx={{
-                  color: "primary.main",
-                  textDecoration: "underline",
-                }}
+                style={{ color: "#1976d2", textDecoration: "none" }}
               >
                 Sign In
               </Typography>

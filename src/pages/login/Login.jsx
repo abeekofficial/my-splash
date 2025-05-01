@@ -3,13 +3,10 @@ import {
   Google,
   LockOpenOutlined,
   LockOutlined,
-  MailLockOutlined,
   MailOutline,
 } from "@mui/icons-material";
 
 // mui components
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   Avatar,
   Box,
@@ -21,34 +18,75 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // react-router-dom
-import { Link, useNavigation } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 
 // hooks
 import { useRegister } from "../../hooks/useRegister";
+import { useLogin } from "../../hooks/useLogin";
+import { useState } from "react";
+
+// action
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
+
+  // Validation
+  if (!data.email || !data.password) {
+    return { error: "All fields are required" };
+  }
+
+  if (data.password.length < 6) {
+    return { error: "Password must be at least 6 characters" };
+  }
+  return data;
+};
 
 const Login = () => {
-  const navigation = useNavigation();
   const { registerWithGoogle } = useRegister();
+  const { loginWithEmail } = useLogin();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isSubmitting = navigation.state === "submitting";
-
-  //handleSubmit
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("login");
+    setIsSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    // Client-side validation
+    if (!email || !password) {
+      toast.error("All fields are required");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      setIsSubmitting(false);
+      return;
+    }
+
+    await loginWithEmail(email, password);
+    setIsSubmitting(false);
   };
 
   return (
     <Container maxWidth="xs">
-      <Paper elevation={10} sx={{ marginTop: 8, padding: 2 }}>
+      <Paper elevation={10} sx={{ marginTop: 8, padding: 4 }}>
         <Avatar
           sx={{
             textAlign: "center",
             mx: "auto",
             bgcolor: "secondary.main",
-            mb: 1,
+            mb: 2,
           }}
         >
           <LockOpenOutlined />
@@ -56,31 +94,43 @@ const Login = () => {
         <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
           Sign in
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+        <Form
+          method="post"
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 3 }}
+        >
           <TextField
-            placeholder="Email"
-            type="email"
-            autoFocus
+            margin="normal"
             required
             fullWidth
-            sx={{ mt: 2 }}
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
             InputProps={{
               endAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position="end">
                   <MailOutline />
                 </InputAdornment>
               ),
             }}
           />
           <TextField
-            placeholder="Password"
+            margin="normal"
             required
             fullWidth
-            sx={{ mt: 2 }}
+            name="password"
+            label="Password"
             type="password"
+            id="password"
+            autoComplete="current-password"
             InputProps={{
               endAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position="end">
                   <LockOutlined />
                 </InputAdornment>
               ),
@@ -91,6 +141,7 @@ const Login = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              mt: 2,
             }}
           >
             <FormControlLabel
@@ -99,62 +150,52 @@ const Login = () => {
             />
             <Typography
               component={Link}
-              to="forgot"
-              sx={{ color: "primary.main", textDecoration: "underline" }}
+              to="/forgot-password"
+              sx={{ color: "primary.main", textDecoration: "none" }}
             >
               Forgot password?
             </Typography>
           </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            gap={2}
-            sx={{ mt: 2 }}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={isSubmitting}
+            sx={{ mt: 3, mb: 2, py: 1.5 }}
           >
-            <Button
-              fullWidth
-              variant="contained"
-              type="submit"
-              disabled={isSubmitting}
-              sx={{
-                py: 1.5,
-                fontWeight: "bold",
-              }}
-            >
-              {isSubmitting ? "Signing Up..." : "Sign Up"}
-            </Button>
-            <Button
-              fullWidth
-              startIcon={<Google />}
-              variant="contained"
-              sx={{
-                backgroundColor: "#7b1fa2",
-                "&:hover": {
-                  backgroundColor: "#9c27b0",
-                  cursor: "pointer",
-                },
-                color: "white",
-                mr: 2,
-              }}
-              onClick={registerWithGoogle}
-            >
-              Google
-            </Button>
-          </Box>
-          <Grid container justifyContent="center" gap="8px" sx={{ mt: 2 }}>
-            <Typography>Don't have an account?</Typography>
-            <Typography
-              to="/register"
-              component={Link}
-              sx={{
-                color: "primary.main",
-                textDecoration: "underline",
-              }}
-            >
-              Sign Up
-            </Typography>
+            {isSubmitting ? "Signing In..." : "Sign In"}
+          </Button>
+          <Button
+            fullWidth
+            startIcon={<Google />}
+            variant="contained"
+            sx={{
+              backgroundColor: "#d81b60",
+              "&:hover": {
+                backgroundColor: "#d81b60",
+                cursor: "pointer",
+              },
+              mb: 2,
+              py: 1.5,
+            }}
+            onClick={registerWithGoogle}
+          >
+            Sign in with Google
+          </Button>
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Typography variant="body2">
+                Don't have an account?{" "}
+                <Link
+                  to="/register"
+                  style={{ color: "#1976d2", textDecoration: "none" }}
+                >
+                  Sign Up
+                </Link>
+              </Typography>
+            </Grid>
           </Grid>
-        </Box>
+        </Form>
       </Paper>
     </Container>
   );

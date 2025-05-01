@@ -13,9 +13,11 @@ import { toast } from "react-toastify";
 // useGlobalContext
 import { useGlobalContext } from "./useGlobalContext";
 import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export const useRegister = () => {
   const { dispatch } = useGlobalContext();
+  const navigate = useNavigate();
 
   // register with google
   const registerWithGoogle = () => {
@@ -24,12 +26,14 @@ export const useRegister = () => {
       .then((result) => {
         const user = result.user;
         dispatch({ type: "LOGIN", payload: user });
-        console.log(user, "user id");
         toast.success(`Welcome ${user.displayName}`);
+        navigate("/");
+        return true;
       })
       .catch((error) => {
         const errorMessage = error.message;
         toast.error(errorMessage);
+        return false;
       });
   };
 
@@ -39,9 +43,11 @@ export const useRegister = () => {
       await signOut(auth);
       dispatch({ type: "LOGOUT" });
       toast.success("Logged out successfully");
-      console.log("user signed out");
+      navigate("/login");
+      return true;
     } catch (error) {
       console.error("error in signing out", error);
+      return false;
     }
   };
 
@@ -57,10 +63,13 @@ export const useRegister = () => {
         const user = userCredential.user;
         dispatch({ type: "LOGIN", payload: user });
         toast.success(`Welcome ${displayName}`);
+        navigate("/");
+        return true;
       })
       .catch((error) => {
         const errorMessage = error.message;
         toast.error(errorMessage);
+        return false;
       });
   };
   return {
